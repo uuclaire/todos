@@ -1,0 +1,74 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Todos</title>
+</head>
+<body>
+  <h1>Todos:</h1>
+  <input type="text" id="field-todo" />
+  <button type="button" id="btn-add">Add</button>
+  <div id="todos"></div>
+  <!--<script>
+    // 自顶向下，逐步求精
+    // 1. 监听事件
+    var field = document.getElementById('field-todo');
+    var btn = document.getElementById('btn-add');
+    var container = document.getElementById('todos');
+
+    field.addEventListener('keyup', function(e) {
+      if (e.key === 13) {
+        addTodo();
+      }
+    });
+    btn.addEventListener('click', function(e) {
+      addTodo();
+    });
+
+    var todos = [];
+    // 2. 添加todo
+    function addTodo() {
+      var todo = field.value;
+      if (!todo) {
+        return;
+      }
+
+      // todos.unshift(todo);
+      // renderTodos();
+
+      var li = document.createElement('li');
+      li.innerText = todo;
+      container.appendChild(li);
+    }
+
+    function renderTodos() {
+      var html = '';
+      for (var i = 0; i < todos.length; i++) {
+        html += `<li>${todos[i]}</li>`;
+      }
+
+      container.innerHTML = `<ul>${html}</ul>`;
+    }
+  </script>-->
+  <script>
+    var input = document.getElementById('field-todo');
+    var addlist = document.getElementById('btn-add');
+    var container = document.getElementById('todos');
+
+    
+    addlist.addEventListener('click', function() {
+      if (!input.value) {
+        return;
+      }
+      var content = input.value;
+      
+      container.innerHTML += content + "<br>";
+    });
+    input.addEventListener()
+
+    
+    
+  </script>
+</body>
+</html>
