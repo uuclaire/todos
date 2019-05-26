@@ -1,16 +1,16 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Todos</title>
-</head>
-<body>
-  <h1>Todos:</h1>
-  <input type="text" id="field-todo" />
-  <button type="button" id="btn-add">Add</button>
-  <div id="todos"></div>
-  <!--<script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Todos</title>
+  </head>
+  <body>
+    <h1>Todos:</h1>
+    <input type="text" id="field-todo" />
+    <button type="button" id="btn-add">Add</button>
+    <div id="todos"></div>
+    <!--<script>
     // 自顶向下，逐步求精
     // 1. 监听事件
     var field = document.getElementById('field-todo');
@@ -51,24 +51,27 @@
       container.innerHTML = `<ul>${html}</ul>`;
     }
   </script>-->
-  <script>
-    var input = document.getElementById('field-todo');
-    var addlist = document.getElementById('btn-add');
-    var container = document.getElementById('todos');
+    <script>
+      var input = document.getElementById("field-todo");
+      var addlist = document.getElementById("btn-add");
+      var container = document.getElementById("todos");
 
-    
-    addlist.addEventListener('click', function() {
-      if (!input.value) {
-        return;
+      addlist.addEventListener("click", function() {
+        addcontents();
+      });
+      input.addEventListener("keyup", function(e) {
+        if (e.key === "Enter") {
+          addcontents();
+        }
+      });
+      function addcontents() {
+        if (!input.value) {
+          return;
+        }
+        var content = input.value;
+
+        container.innerHTML += content + "<br>";
       }
-      var content = input.value;
-      
-      container.innerHTML += content + "<br>";
-    });
-    input.addEventListener()
-
-    
-    
-  </script>
-</body>
+    </script>
+  </body>
 </html>
