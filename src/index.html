@@ -1,47 +1,47 @@
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Todos</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <h1>Todos:</h1>
     <input type="text" id="field-todo" />
     <button type="button" id="btn-add">Add</button>
     <div id="todos"></div>
 
     <script>
-        var input = document.getElementById("field-todo");
-        var addlist = document.getElementById("btn-add");
-        var container = document.getElementById("todos");
+      var input = document.getElementById("field-todo");
+      var addlist = document.getElementById("btn-add");
+      var container = document.getElementById("todos");
 
-        addlist.addEventListener("click", function() {
-            addcontents();
-        });
-        input.addEventListener("keyup", function(e) {
-            if (e.key === "Enter") {
-                addcontents();
-            }
-        });
-
-        function addcontents() {
-            var todo = input.value;
-            if (!todo) {
-                return;
-            }
-            var span = "<span>" + "删除";
-            var content = todo + " " + span;
-
-            container.innerHTML += "<li>" + content + "<br>";
+      addlist.addEventListener("click", function() {
+        addcontents();
+      });
+      input.addEventListener("keyup", function(e) {
+        if (e.key === "Enter") {
+          addcontents();
         }
-        container.addEventListener("click", function(e) {
-            var parent = e.target.parentNode;
-            parent.remove();
-        })
-    </script>
-</body>
+      });
 
+      function addcontents() {
+        var todo = input.value;
+        if (!todo) {
+          return;
+        }
+        var span = "<span>" + "删除" + "</span>";
+        var content = todo + " " + span;
+
+        container.innerHTML += "<li>" + content + "<br>" + "</li>";
+      }
+      container.addEventListener("click", function(e) {
+        var parent = e.target.parentNode;
+        if (e.target.tagName === "SPAN") {
+          parent.remove();
+        }
+      });
+    </script>
+  </body>
 </html>
