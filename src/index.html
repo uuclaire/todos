@@ -1,47 +1,66 @@
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Todos</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <h1>Todos:</h1>
     <input type="text" id="field-todo" />
     <button type="button" id="btn-add">Add</button>
     <div id="todos"></div>
 
     <script>
-      var input = document.getElementById("field-todo");
-      var addlist = document.getElementById("btn-add");
-      var container = document.getElementById("todos");
+        var input = document.getElementById("field-todo");
+        var addlist = document.getElementById("btn-add");
+        var container = document.getElementById("todos");
 
-      addlist.addEventListener("click", function() {
-        addcontents();
-      });
-      input.addEventListener("keyup", function(e) {
-        if (e.key === "Enter") {
-          addcontents();
-        }
-      });
+        addlist.addEventListener("click", function() {
+            addcontents();
+        });
+        input.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
+                addcontents();
+            }
+        });
 
-      function addcontents() {
-        var todo = input.value;
-        if (!todo) {
-          return;
-        }
-        var span = "<span>" + "删除" + "</span>";
-        var content = todo + " " + span;
+        function addcontents() {
+            var todo = input.value;
+            if (!todo) {
+                return;
+            }
+            var span = "<span id = 'delete'>" + "删除" + "</span>";
+            var content = "<input type = 'checkbox'>" + "<span id = 'todocontent'>" + todo + "</span>" + " " + span;
 
-        container.innerHTML += "<li>" + content + "<br>" + "</li>";
-      }
-      container.addEventListener("click", function(e) {
-        var parent = e.target.parentNode;
-        if (e.target.tagName === "SPAN") {
-          parent.remove();
+            container.innerHTML += "<li>" + content + "<br>" + "</li>";
         }
-      });
+        container.addEventListener("click", function(e) {
+            var parent = e.target.parentNode;
+            if (e.target.id === "delete") {
+                parent.remove();
+            }
+            if (e.target.tagName === "INPUT" && e.target.checked === true) {
+                e.target.nextElementSibling.style.textDecoration = "line-through";
+
+            }
+            if (e.target.tagName === "INPUT" && e.target.checked === false) {
+                e.target.nextElementSibling.style.textDecoration = "none";
+
+            }
+            /*container.addEventListener("dblclick", function(e) {
+                if (e.target.id === "todocontent") {
+                    var newTodo = document.createElement("input");
+                    var oldTodo = document.getElementById("todocontent").innerText;
+                    newTodo.type = "text";
+                    newTodo.innerText = oldTodo;
+                }
+            })*/
+
+        });
     </script>
-  </body>
+</body>
+
 </html>
