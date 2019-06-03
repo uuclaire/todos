@@ -1,91 +1,135 @@
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Todos</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <h1>Todos:</h1>
     <input type="text" id="field-todo" />
     <button type="button" id="btn-add">Add</button>
     <div id="todos"></div>
+    <span><button type="button" id="all">All</button></span>
+    <span><button type="button" id="active">Active</button></span>
+    <span><button type="button" id="compeleted">Compeleted</button></span>
+
+    <style type="text/css">
+        li {
+            list-style-type: none
+        }
+    </style>
 
     <script>
-      var input = document.getElementById("field-todo");
-      var addlist = document.getElementById("btn-add");
-      var container = document.getElementById("todos");
+        var input = document.getElementById('field-todo');
+        var addlist = document.getElementById('btn-add');
+        var container = document.getElementById('todos');
+        //获取按钮
+        var all = document.getElementById('all');
+        var active = document.getElementById('active');
+        var compeleted = document.getElementById('compeleted');
+        addlist.addEventListener("click", function() {
+            addcontents();
+        });
+        input.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
+                addcontents();
+            }
+        });
 
-      addlist.addEventListener("click", function() {
-        addcontents();
-      });
-      input.addEventListener("keyup", function(e) {
-        if (e.key === "Enter") {
-          addcontents();
+        function addcontents() {
+            var todo = input.value;
+            if (!todo) {
+                return;
+            }
+            var span = "<span id = 'delete'>" + "删除" + "</span>";
+            var content =
+                "<input type='checkbox' id='checkbox' class = 'ifCheck'>" +
+                "<span id = 'todocontent'>" +
+                todo +
+                "</span>" +
+                `<input style="display: none;" class="edit" />` +
+                " " +
+                span;
+
+            container.innerHTML += "<li>" + content + "<br>" + "</li>";
         }
-      });
+        container.addEventListener("click", function(e) {
+            var target = e.target;
+            var parent = target.parentNode;
 
-      function addcontents() {
-        var todo = input.value;
-        if (!todo) {
-          return;
-        }
-        var span = "<span id = 'delete'>" + "删除" + "</span>";
-        var content =
-          "<input type='checkbox' id='checkbox'>" +
-          "<span id = 'todocontent'>" +
-          todo +
-          "</span>" +
-          `<input style="display: none;" class="edit" />` +
-          " " +
-          span;
+            if (target.id === "delete") {
+                parent.remove();
+                return;
+            }
 
-        container.innerHTML += "<li>" + content + "<br>" + "</li>";
-      }
-      container.addEventListener("click", function(e) {
-        var target = e.target;
-        var parent = target.parentNode;
+            if (target.id === "checkbox") {
+                target.nextElementSibling.style.textDecoration = target.checked ?
+                    "line-through" :
+                    "none";
+            }
+        });
 
-        if (target.id === "delete") {
-          parent.remove();
-          return;
-        }
+        container.addEventListener("dblclick", function(e) {
+            if (e.target.id === "todocontent") {
+                var input = e.target.nextElementSibling;
+                input.value = e.target.innerText;
+                input.style.display = 'inline';
+                input.focus();
+            }
+        });
 
-        if (target.id === "checkbox") {
-          target.nextElementSibling.style.textDecoration = target.checked
-            ? "line-through"
-            : "none";
-        }
-      });
+        container.addEventListener('focusout', saveTodo);
+        //这里不用onblur是因为他不能冒泡；
+        container.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                saveTodo(e)
+            }
+        });
 
-      container.addEventListener("dblclick", function(e) {
-        if (e.target.id === "todocontent") {
-          var input = e.target.nextElementSibling;
-          input.value = e.target.innerText;
-          input.style.display = 'inline';
-          input.focus();
-        }
-      });
+        function saveTodo(e) {
+            if (e.target.classList.contains('edit')) {
+                var v = e.target.value;
 
-      container.addEventListener('focusout', saveTodo);
-      container.addEventListener('keyup', function(e) {
-        if (e.key === 'Enter') {
-          saveTodo(e)
-        }
-      });
+                if (v) {
+                    e.target.previousElementSibling.innerText = v;
+                }
 
-      function saveTodo(e) {
-        if (e.target.classList.contains('edit')) {
-          var v = e.target.value;
+                e.target.style.display = 'none';
+            }
+        };
+        //给未完成按钮绑定点击事件，点击未完成的，checkbox值为false的显示，为true的隐藏；
+        active.addEventListener('click', function() {
+                var checkbox = document.getElementsByClassName('ifCheck');
+                for (var i = 0; i < checkbox.length; i++) {
+                    if (checkbox[i].checked) {
+                        checkbox[i].parentNode.style.display = 'none';
+                    } else {
+                        checkbox[i].parentNode.style.display = 'block';
+                    }
+                }
+            })
+            //同样的思路给完成的按钮绑定点击事件；
+        compeleted.addEventListener('click', function() {
+                var checkbox = document.getElementsByClassName('ifCheck');
+                for (var i = 0; i < checkbox.length; i++) {
+                    if (!checkbox[i].checked) {
+                        checkbox[i].parentNode.style.display = 'none';
+                    } else {
+                        checkbox[i].parentNode.style.display = 'block';
+                    }
+                }
+            })
+            //给ALL 添加事件；
 
-          if (v) {
-            e.target.previousElementSibling.innerText = v;
-          }
+        all.addEventListener('click', function() {
+            var div = document.getElementById('todos');
+            div.style.display = 'block';
 
-          e.target.style.display = 'none';
-        }
-      }
+        })
     </script>
-  </body>
+</body>
+
 </html>
