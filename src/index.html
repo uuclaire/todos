@@ -1,14 +1,15 @@
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Todos</title>
-  </head>
+</head>
 
-  <body>
+<body>
     <h1>Todos:</h1>
-    <input type="checkbox" id="selectAll" />
+    <input type="checkbox" id="selectAll" class="clear" />
     <input type="text" id="field-todo" />
     <button type="button" id="btn-add">Add</button>
     <div id="todos"></div>
@@ -17,129 +18,153 @@
     <span><button type="button" id="compeleted">Compeleted</button></span>
 
     <style type="text/css">
-      li {
-        list-style-type: none;
-      }
+        li {
+            list-style-type: none;
+        }
     </style>
 
     <script>
-      var input = document.getElementById("field-todo");
-      var addlist = document.getElementById("btn-add");
-      var container = document.getElementById("todos");
-      var selectAll = document.getElementById("selectAll");
-      //获取按钮
-      var all = document.getElementById("all");
-      var active = document.getElementById("active");
-      var compeleted = document.getElementById("compeleted");
-      addlist.addEventListener("click", function() {
-        addcontents();
-      });
-      input.addEventListener("keyup", function(e) {
-        if (e.key === "Enter") {
-          addcontents();
-        }
-      });
+        var input = document.getElementById("field-todo");
+        var addlist = document.getElementById("btn-add");
+        var container = document.getElementById("todos");
+        var selectAll = document.getElementById("selectAll");
+        var clear = document.querySelectorAll(".clear");
+        var body = document.getElementsByTagName("body");
+        //获取按钮
+        var all = document.getElementById("all");
+        var active = document.getElementById("active");
+        var compeleted = document.getElementById("compeleted");
+        addlist.addEventListener("click", function() {
+            addcontents();
+        });
+        input.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
+                addcontents();
+            }
+        });
 
-      function addcontents() {
-        var todo = input.value;
-        if (!todo) {
-          return;
+        function addcontents() {
+            var todo = input.value;
+            if (!todo) {
+                return;
+            }
+            var span = "<span id = 'delete'>" + "删除" + "</span>";
+            var content =
+                "<input type='checkbox' id='checkbox' class = 'ifCheck clear'>" +
+                "<span id = 'todocontent'>" +
+                todo +
+                "</span>" +
+                `<input style="display: none;" class="edit" />` +
+                " " +
+                span;
+            var li = document.createElement("li");
+            li.innerHTML = content;
+            container.appendChild(li);
         }
-        var span = "<span id = 'delete'>" + "删除" + "</span>";
-        var content =
-          "<input type='checkbox' id='checkbox' class = 'ifCheck'>" +
-          "<span id = 'todocontent'>" +
-          todo +
-          "</span>" +
-          `<input style="display: none;" class="edit" />` +
-          " " +
-          span;
-        var li = document.createElement("li");
-        li.innerHTML = content;
-        container.appendChild(li);
-      }
-      container.addEventListener("click", function(e) {
-        var target = e.target;
-        var parent = target.parentNode;
+        container.addEventListener("click", function(e) {
+            var target = e.target;
+            var parent = target.parentNode;
 
-        if (target.id === "delete") {
-          parent.remove();
-          return;
-        }
+            if (target.id === "delete") {
+                parent.remove();
+                return;
+            }
 
-        if (target.id === "checkbox") {
-          target.nextElementSibling.style.textDecoration = target.checked
-            ? "line-through"
-            : "none";
-        }
-      });
+            if (target.id === "checkbox") {
+                target.nextElementSibling.style.textDecoration = target.checked ?
+                    "line-through" :
+                    "none";
+            }
+        });
 
-      container.addEventListener("dblclick", function(e) {
-        if (e.target.id === "todocontent") {
-          var input = e.target.nextElementSibling;
-          input.value = e.target.innerText;
-          input.style.display = "inline";
-          input.focus();
-        }
-      });
+        container.addEventListener("dblclick", function(e) {
+            if (e.target.id === "todocontent") {
+                var input = e.target.nextElementSibling;
+                input.value = e.target.innerText;
+                input.style.display = "inline";
+                input.focus();
+            }
+        });
 
-      container.addEventListener("focusout", saveTodo);
-      //这里不用onblur是因为他不能冒泡；
-      container.addEventListener("keyup", function(e) {
-        if (e.key === "Enter") {
-          saveTodo(e);
-        }
-      });
+        container.addEventListener("focusout", saveTodo);
+        //这里不用onblur是因为他不能冒泡；
+        container.addEventListener("keyup", function(e) {
+            if (e.key === "Enter") {
+                saveTodo(e);
+            }
+        });
 
-      function saveTodo(e) {
-        if (e.target.classList.contains("edit")) {
-          var v = e.target.value;
+        function saveTodo(e) {
+            if (e.target.classList.contains("edit")) {
+                var v = e.target.value;
 
-          if (v) {
-            e.target.previousElementSibling.innerText = v;
-          }
+                if (v) {
+                    e.target.previousElementSibling.innerText = v;
+                }
 
-          e.target.style.display = "none";
+                e.target.style.display = "none";
+            }
         }
-      }
-      //给未完成按钮绑定点击事件，点击未完成的，checkbox值为false的显示，为true的隐藏；
-      active.addEventListener("click", function() {
-        var checkbox = document.getElementsByClassName("ifCheck");
-        for (var i = 0; i < checkbox.length; i++) {
-          if (checkbox[i].checked) {
-            checkbox[i].parentNode.style.display = "none";
-          } else {
-            checkbox[i].parentNode.style.display = "block";
-          }
-        }
-      });
-      //同样的思路给完成的按钮绑定点击事件；
-      compeleted.addEventListener("click", function() {
-        var checkbox = document.getElementsByClassName("ifCheck");
-        for (var i = 0; i < checkbox.length; i++) {
-          if (!checkbox[i].checked) {
-            checkbox[i].parentNode.style.display = "none";
-          } else {
-            checkbox[i].parentNode.style.display = "block";
-          }
-        }
-      });
-      //给ALL 添加事件；
+        //给未完成按钮绑定点击事件，点击未完成的，checkbox值为false的显示，为true的隐藏；
+        active.addEventListener("click", function() {
+            var checkbox = document.getElementsByClassName("ifCheck");
+            for (var i = 0; i < checkbox.length; i++) {
+                if (checkbox[i].checked) {
+                    checkbox[i].parentNode.style.display = "none";
+                } else {
+                    checkbox[i].parentNode.style.display = "block";
+                }
+            }
+        });
+        //同样的思路给完成的按钮绑定点击事件；
+        compeleted.addEventListener("change", function() {
+            var checkbox = document.getElementsByClassName("ifCheck");
+            for (var i = 0; i < checkbox.length; i++) {
+                if (!checkbox[i].checked) {
+                    checkbox[i].parentNode.style.display = "none";
+                } else {
+                    checkbox[i].parentNode.style.display = "block";
+                }
+            }
+        });
+        //给ALL 添加事件；
 
-      all.addEventListener("click", function() {
-        var len = container.childNodes.length;
-        for (var i = 0; i < len; i++) {
-          container.childNodes[i].style.display = "block";
-        }
-      });
-      selectAll.addEventListener("click", function() {
-        var len = container.childNodes.length;
-        if (selectAll.checked) {
-          for (var i = 0; i < len; i++) {
-            container.childNodes[i].checked = true;
-          }
-        }
-      });
+        all.addEventListener("click", function() {
+            var len = container.childNodes.length;
+            for (var i = 0; i < len; i++) {
+                container.childNodes[i].style.display = "block";
+            }
+        });
+        selectAll.addEventListener("change", function() {
+            var inputs = container.querySelectorAll('.ifCheck');
+            if (selectAll.checked) {
+                inputs.forEach(function(element) {
+                    element.checked = true;
+                    element.nextElementSibling.style.textDecoration = 'line-through';
+
+                })
+            } else {
+                inputs.forEach(function(element) {
+                    element.checked = false;
+                    element.nextElementSibling.style.textDecoration = 'none';
+                })
+            }
+        });
+        body.addEventListener("click", function clear(e) {
+            if (e.target.classList.contains("clear")) {
+                var len = clear.length;
+                for (var i = 0; i < len; i++) {
+                    if (clear.checked) {
+                        var clear = document.createElement("span");
+                        var clearButton = document.createElement("button");
+                        var clearCompelet = document.createTextNode("clear compelet");
+                        clearButton.appendChild(clearCompelet);
+                        clear.appendChild(clearButton);
+                    }
+                }
+            }
+        })
     </script>
-  </body>
+</body>
+
 </html>
