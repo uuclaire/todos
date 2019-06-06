@@ -16,10 +16,14 @@
     <span><button type="button" id="all">All</button></span>
     <span><button type="button" id="active">Active</button></span>
     <span><button type="button" id="compeleted">Compeleted</button></span>
-
+    <span><button type="button" id="remove">Clear Compeleted</button></span>
     <style type="text/css">
         li {
             list-style-type: none;
+        }
+        
+        #remove {
+            display: none;
         }
     </style>
 
@@ -29,7 +33,8 @@
         var container = document.getElementById("todos");
         var selectAll = document.getElementById("selectAll");
         var clear = document.querySelectorAll(".clear");
-        var body = document.getElementsByTagName("body");
+        var body = document.body;
+        var remove = document.getElementById("remove");
         //获取按钮
         var all = document.getElementById("all");
         var active = document.getElementById("active");
@@ -152,14 +157,15 @@
         });
         body.addEventListener("click", function clear(e) {
             if (e.target.classList.contains("clear")) {
+                //為啥明明前面已經聲明了clear這個變量了呀，這裡不重新聲明就不行了
+                var clear = document.querySelectorAll(".clear");
                 var len = clear.length;
                 for (var i = 0; i < len; i++) {
-                    if (clear.checked) {
-                        var clear = document.createElement("span");
-                        var clearButton = document.createElement("button");
-                        var clearCompelet = document.createTextNode("clear compelet");
-                        clearButton.appendChild(clearCompelet);
-                        clear.appendChild(clearButton);
+                    if (clear[i].checked) {
+                        remove.style.display = "inline";
+                        return;
+                    } else {
+                        remove.style.display = "none";
                     }
                 }
             }
