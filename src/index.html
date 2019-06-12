@@ -40,10 +40,12 @@
       var compeleted = document.getElementById("compeleted");
       addlist.addEventListener("click", function() {
         addcontents();
+        shouldSelectAllChecked();
       });
       input.addEventListener("keyup", function(e) {
         if (e.key === "Enter") {
           addcontents();
+          shouldSelectAllChecked();
         }
       });
 
@@ -71,6 +73,7 @@
 
         if (target.id === "delete") {
           parent.remove();
+          shouldSelectAllChecked();
           return;
         }
 
@@ -79,6 +82,7 @@
             ? "line-through"
             : "none";
           shouldClearBtnShow();
+          shouldSelectAllChecked();
         }
       });
 
@@ -169,6 +173,17 @@
           }
         }
       }
+      function shouldSelectAllChecked() {
+        var checkbox = container.querySelectorAll(".ifCheck");
+        for (var i = 0; i < checkbox.length; i++) {
+          if (!checkbox[i].checked) {
+            selectAll.checked = false;
+            return;
+          } else {
+            selectAll.checked = true;
+          }
+        }
+      }
       remove.addEventListener("click", function() {
         var checkbox = container.querySelectorAll(".ifCheck");
         for (var i = 0; i < checkbox.length; i++) {
@@ -176,6 +191,7 @@
             checkbox[i].parentNode.remove();
           }
         }
+        selectAll.checked = false;
       });
     </script>
   </body>
