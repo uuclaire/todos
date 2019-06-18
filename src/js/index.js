@@ -8,9 +8,9 @@ var btnCompleted = document.getElementById('btn-completed');
 var btnClear = document.getElementById('btn-clear');
 
 var Status = {
-  all: 0,
-  active: 1,
-  completed: 2,
+    all: 0,
+    active: 1,
+    completed: 2,
 };
 
 // Model数据
@@ -27,17 +27,17 @@ var Controller = {};
 
 // 自顶向下逐步求精的过程
 function init() {
-  recoverTodos(); // 从localStorage里面恢复todos记录
-  renderTodos(); // 渲染todos记录到页面中
-  initEvents(); // 初始化所有事件
+    recoverTodos(); // 从localStorage里面恢复todos记录
+    renderTodos(); // 渲染todos记录到页面中
+    initEvents(); // 初始化所有事件
 }
 
-var recoverTodos = function () {};
-var renderTodos = function () {
-  var html = '';
-  for (var i = 0; i < todos.length; i++) {
-    var item = todos[i];
-    html += `
+var recoverTodos = function() {};
+var renderTodos = function() {
+    var html = '';
+    for (var i = 0; i < todos.length; i++) {
+        var item = todos[i];
+        html += `
       <li 
         style="${!item.visible ? 'display: none;' : ''}"
         class="todo-item" 
@@ -52,117 +52,134 @@ var renderTodos = function () {
         <button class="btn-delete">删除</button>
       </li>
     `
-  }
-
-  list.innerHTML = html;
-};
-var initEvents = function () {
-  initAddEvent();
-  initItemEvent();
-  initOperationEvent();
-};
-
-var initAddEvent = function () {
-
-  btnAdd.addEventListener('click', function () {
-    var todo = field.value;
-    if (todo) {
-      todos.push({
-        checked: false,
-        // Status.all -> true
-        // Status.active -> true
-        // Status.completed -> false
-        visible: filter !== Status.completed,
-        value: todo,
-      });
-
     }
-    renderTodos();
-  });
-  field.addEventListener('keyup', function (e) {
-    var todo = field.value;
-    if (todo && e.key === "Enter") {
-      todos.push({
-        checked: false,
-        // Status.all -> true
-        // Status.active -> true
-        // Status.completed -> false
-        visible: filter !== Status.completed,
-        value: todo,
-      });
-    }
-    renderTodos();
-  });
 
+    list.innerHTML = html;
 };
-var initItemEvent = function () {
-  list.addEventListener('click', function (e) {
-    var target = e.target;
-    var classList = target.classList;
-    var li = target.parentNode;
-    var idx = li.getAttribute('data-idx');
-
-    if (classList.contains('btn-finish')) {
-      todos[idx].checked = target.checked;
-      for (var i = 0; i < todos.length; i++) {
-        if (!todos[i].checked) {
-          btnCheck.checked = false;
-          return;
+var renderBtnAll = function() {
+    for (var i = 0; i < todos.length; i++) {
+        if (todos[i].checked) {
+            btnCheck.checked = true;
+            btnClear.style.display = 'inline';
+            return;
         } else {
-          btnCheck.checked = true;
+            btnCheck.checked = false;
+            btnClear.style.display = 'none';
         }
-      }
-    } else if (classList.contains('btn-delete')) {
-      todos.splice(idx, 1);
     }
-
-    renderTodos();
-  });
+    if (todos.length === 0) {
+        btnCheck.checked = false;
+        btnClear.style.display = 'none';
+    }
 };
-var initOperationEvent = function () {
-  btnCheck.addEventListener('click', function () {
-    for (var i = 0; i < todos.length; i++) {
-      todos[i].checked = btnCheck.checked;
-    }
 
-    renderTodos();
-  });
+var initEvents = function() {
+    initAddEvent();
+    initItemEvent();
+    initOperationEvent();
+};
 
-  btnAll.addEventListener('click', function () {
-    filter = Status.all;
-    for (var i = 0; i < todos.length; i++) {
-      var todo = todos[i];
-      todo.visible = true;
-    }
+var initAddEvent = function() {
 
-    renderTodos();
-  });
-  btnActive.addEventListener('click', function () {
-    filter = Status.active;
-    for (var i = 0; i < todos.length; i++) {
-      var todo = todos[i];
-      todo.visible = !todo.checked;
-    }
+    btnAdd.addEventListener('click', function() {
+        var todo = field.value;
+        if (todo) {
+            todos.push({
+                checked: false,
+                // Status.all -> true
+                // Status.active -> true
+                // Status.completed -> false
+                visible: filter !== Status.completed,
+                value: todo,
+            });
 
-    renderTodos();
-  });
-  btnCompleted.addEventListener('click', function () {
-    filter = Status.completed;
-    for (var i = 0; i < todos.length; i++) {
-      var todo = todos[i];
-      todo.visible = todo.checked;
-    }
-
-    renderTodos();
-  });
-
-  btnClear.addEventListener('click', function () {
-    todos = todos.filter(function (todo) {
-      return !todo.checked;
+        }
+        renderTodos();
+        renderBtnAll();
     });
-    btnCheck.checked = false;
-    renderTodos();
-  });
+    field.addEventListener('keyup', function(e) {
+        var todo = field.value;
+        if (todo && e.key === "Enter") {
+            todos.push({
+                checked: false,
+                // Status.all -> true
+                // Status.active -> true
+                // Status.completed -> false
+                visible: filter !== Status.completed,
+                value: todo,
+            });
+        }
+        renderTodos();
+        renderBtnAll();
+    });
+
+};
+var initItemEvent = function() {
+    list.addEventListener('click', function(e) {
+        var target = e.target;
+        var classList = target.classList;
+        var li = target.parentNode;
+        var idx = li.getAttribute('data-idx');
+
+        if (classList.contains('btn-finish')) {
+            todos[idx].checked = target.checked;
+
+        } else if (classList.contains('btn-delete')) {
+            todos.splice(idx, 1);
+        }
+
+        renderTodos();
+        renderBtnAll();
+    });
+};
+var initOperationEvent = function() {
+    btnCheck.addEventListener('click', function() {
+        for (var i = 0; i < todos.length; i++) {
+            todos[i].checked = btnCheck.checked;
+        }
+
+        renderTodos();
+        renderBtnAll();
+    });
+
+    btnAll.addEventListener('click', function() {
+        filter = Status.all;
+        for (var i = 0; i < todos.length; i++) {
+            var todo = todos[i];
+            todo.visible = true;
+        }
+
+        renderTodos();
+        renderBtnAll();
+    });
+    btnActive.addEventListener('click', function() {
+        filter = Status.active;
+        for (var i = 0; i < todos.length; i++) {
+            var todo = todos[i];
+            todo.visible = !todo.checked;
+        }
+
+        renderTodos();
+        renderBtnAll();
+    });
+    btnCompleted.addEventListener('click', function() {
+        filter = Status.completed;
+        for (var i = 0; i < todos.length; i++) {
+            var todo = todos[i];
+            todo.visible = todo.checked;
+        }
+
+        renderTodos();
+        renderBtnAll();
+    });
+
+    btnClear.addEventListener('click', function() {
+        todos = todos.filter(function(todo) {
+            return !todo.checked;
+        });
+        renderTodos();
+        renderBtnAll();
+    });
 };
 
 init();
